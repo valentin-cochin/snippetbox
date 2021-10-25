@@ -19,6 +19,11 @@ func main() {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	log.Println("Serving request: ", r.URL.Path)
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
 	w.Write([]byte("Hello from Snippetbox"))
 }
 
