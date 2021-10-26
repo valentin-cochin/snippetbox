@@ -2,25 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 )
 
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/snippet", showSnippet)
-	mux.HandleFunc("/snippet/create", createSnippet)
-
-	port := ":4000"
-	log.Println("Starting server on ", port)
-	err := http.ListenAndServe(port, mux)
-	log.Fatal(err)
-}
-
 func home(w http.ResponseWriter, r *http.Request) {
-	log.Println("Serving request: ", r.URL.Path)
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
