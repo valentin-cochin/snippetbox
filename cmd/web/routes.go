@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/bmizerany/pat" // New import
+	"github.com/bmizerany/pat"
 	"github.com/justinas/alice"
 )
 
