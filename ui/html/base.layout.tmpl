@@ -20,9 +20,9 @@
                 {{end}}
             </div>
             <div>
-                <!-- Toggle the navigation links -->
                 {{if .IsAuthenticated}}
                     <form action='/user/logout' method='POST'>
+                        <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
                         <button>Logout</button>
                     </form>
                 {{else}}
