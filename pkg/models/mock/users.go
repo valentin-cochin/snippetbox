@@ -3,7 +3,7 @@ package mock
 import (
 	"time"
 
-	"alexedwards.net/snippetbox/pkg/models"
+	"silvergopher.com/snippetbox/pkg/models"
 )
 
 var mockUser = &models.User{
