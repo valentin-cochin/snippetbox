@@ -40,6 +40,7 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
+	// debug := flag.Bool("debug", false, "Enable debug mode")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
 	flag.Parse()
@@ -53,7 +54,8 @@ func main() {
 	}
 	defer db.Close()
 
-	templateCache, err := newTemplateCache("./ui/html/")
+	// Remove the template directory location parameter.
+	templateCache, err := newTemplateCache()
 	if err != nil {
 		errorLog.Fatal(err)
 	}

@@ -2,11 +2,13 @@ package main
 
 import (
 	"html/template"
+	"io/fs"
 	"path/filepath"
 	"time"
 
 	"silvergopher.com/snippetbox/pkg/forms"
 	"silvergopher.com/snippetbox/pkg/models"
+	"silvergopher.com/snippetbox/ui"
 )
 
 type templateData struct {
@@ -36,10 +38,13 @@ var functions = template.FuncMap{
 	"humanDate": humanDate,
 }
 
-func newTemplateCache(dir string) (map[string]*template.Template, error) {
+func newTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob(filepath.Join(dir, "*.page.tmpl"))
+	// Use fs.Glob() to get a slice of all filepaths in the ui.Files embedded filesystem
+	// which match the pattern 'html/*.page.tmpl'. This essentially gives us a slice of
+	// all the 'page' templates for the application, just like before.
+	pages, err := fs.Glob(ui.Files, "html/*.page.tmpl")
 	if err != nil {
 		return nil, err
 	}
@@ -47,21 +52,21 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		// The template.FuncMap must be registered with the template set before you
-		// call the ParseFiles() method. This means we have to use template.New() to
-		// create an empty template set, use the Funcs() method to register the
-		// template.FuncMap, and then parse the file as normal.
-		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
+		// Use the ParseFS() method to parse a specific page template from the ui.Files
+		// embedded filesystem.
+		ts, err := template.New(name).Funcs(functions).ParseFS(ui.Files, page)
 		if err != nil {
 			return nil, err
 		}
 
-		ts, err = ts.ParseGlob(filepath.Join(dir, "*.layout.tmpl"))
+		// Use ParseFS() again to add any 'layout' templates to the template set.
+		ts, err = ts.ParseFS(ui.Files, "html/*.layout.tmpl")
 		if err != nil {
 			return nil, err
 		}
 
-		ts, err = ts.ParseGlob(filepath.Join(dir, "*.partial.tmpl"))
+		// Likewise use ParseFS() to add any 'partial' templates to the template set.
+		ts, err = ts.ParseFS(ui.Files, "html/*.partial.tmpl")
 		if err != nil {
 			return nil, err
 		}
