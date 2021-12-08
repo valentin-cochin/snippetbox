@@ -19,6 +19,7 @@ type templateData struct {
 	IsAuthenticated bool
 	Snippet         *models.Snippet
 	Snippets        []*models.Snippet
+	User            *models.User
 }
 
 // Create a humanDate function which returns a nicely formatted string

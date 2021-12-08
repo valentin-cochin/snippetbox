@@ -178,10 +178,9 @@ func (app *application) userProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// app.render(w, r, "profile.page.tmpl", &templateData{
-	// 	User: user,
-	// })
-	fmt.Fprintf(w, "%+v", user)
+	app.render(w, r, "profile.page.tmpl", &templateData{
+		User: user,
+	})
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
